@@ -123,7 +123,7 @@ This chapter describes that the user can use a script program to extract specifi
 - Embedded TM ROS Driver [Usage Guideline](./doc/tm_foxy_description_e.md)
 
 **Note 1**: If the user just want to use the TM Robot nominal model to control the robot, the user can skip the rest of this chapter.<br/>
-**Note 2**: The tm_description package contains description files and meshes, available for the TM5S, TM7S, TM12S, TM14S, and TM25S model, and some Cobot models will be added later.
+**Note 2**: The tm_description package contains description files and meshes, available for the TM5S, TM7S, TM12S, TM14S, TM25S, and TM30S models.<br/>
 <div> </div>
 
 ## __7. Related ROS Projects and Tutorials Usage__
@@ -131,6 +131,8 @@ This chapter describes that the user can use a script program to extract specifi
 The user can use MoveIt to control the TM robot in the motion planning to plan paths or run the TM Robot simulation into your scene description for operations such as _collision checking_ or _obstacle avoidance_.
 See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/source/) to install the MoveIt2 packages.<br/>
 - External TM ROS Driver [Usage Guideline](./doc/tm_foxy_extension.md)
+
+**Note**: Some packages with ROS2 Foxy MoveIt2 configurations for The TM Cobots are available for the TM5S, TM7S, TM12S, TM14S, and TM25S models.<br/>
 <div> </div>
 
 ## __8. Contact us / Technical support__
