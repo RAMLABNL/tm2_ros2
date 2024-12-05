@@ -132,7 +132,7 @@ The user can use MoveIt to control the TM robot in the motion planning to plan p
 See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/binary/) to install the MoveIt2 packages.<br/>
 - External TM ROS Driver [Usage Guideline](./doc/tm_humble_extension.md)
 
-**Note **: Some packages with ROS2 Humble MoveIt2 configurations for The TM Cobots are available for the TM5S, TM7S, TM12S, TM14S, and TM25S models.<br/>
+**Note**: Some packages with ROS2 Humble MoveIt2 configurations for TM Cobots are available for the TM5S, TM7S, TM12S, TM14S, and TM25S models.<br/>
 <div> </div>
 
 ## __8. Contact us / Technical support__
