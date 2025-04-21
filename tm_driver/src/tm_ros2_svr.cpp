@@ -19,7 +19,7 @@ TmSvrRos2::TmSvrRos2(rclcpp::Node::SharedPtr node, TmDriver &iface, bool is_fake
 
     pm_.fbs_pub = node->create_publisher<tm_msgs::msg::FeedbackState>("feedback_states", 1);
     pm_.joint_pub = node->create_publisher<sensor_msgs::msg::JointState>("joint_states", 1);
-    //pm_.tool_pose_pub = node->create_publisher<geometry_msgs::msg::PoseStamped>("tool_pose", 1);
+    pm_.tool_pose_pub = node->create_publisher<geometry_msgs::msg::PoseStamped>("tool_pose", 1);
     if (!is_fake) {
         pm_.svr_pub = node->create_publisher<tm_msgs::msg::SvrResponse>("svr_response", 1);
     }
@@ -157,7 +157,7 @@ void TmSvrRos2::publish_fbs()
     pm.joint_pub->publish(pm.joint_msg);
 
     // Publish tool pose
-   /* auto& pose = pm.fbs_msg.tool_pose;
+    auto &pose = pm.fbs_msg.tool_pose;
     tf2::Quaternion quat;
     quat.setRPY(pose[3], pose[4], pose[5]);
     pm.tool_pose_msg.header.stamp = pm.joint_msg.header.stamp;
@@ -165,7 +165,7 @@ void TmSvrRos2::publish_fbs()
     pm.tool_pose_msg.pose.position.y = pose[1];
     pm.tool_pose_msg.pose.position.z = pose[2];
     pm.tool_pose_msg.pose.orientation = tf2::toMsg(quat);
-    pm.tool_pose_pub->publish(pm.tool_pose_msg); */
+    pm.tool_pose_pub->publish(pm.tool_pose_msg);
 }
 void TmSvrRos2::fake_publisher()
 {

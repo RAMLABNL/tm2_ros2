@@ -28,12 +28,12 @@ public:
     struct PubMsg {
         rclcpp::Publisher<tm_msgs::msg::FeedbackState>::SharedPtr fbs_pub;
         rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_pub;
-        //rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr tool_pose_pub;
+        rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr tool_pose_pub;
         rclcpp::Publisher<tm_msgs::msg::SvrResponse>::SharedPtr svr_pub;
 
         tm_msgs::msg::FeedbackState fbs_msg;
         sensor_msgs::msg::JointState joint_msg;
-        //geometry_msgs::msg::PoseStamped tool_pose_msg;
+        geometry_msgs::msg::PoseStamped tool_pose_msg;
         tm_msgs::msg::SvrResponse svr_msg;
     } pm_;
     

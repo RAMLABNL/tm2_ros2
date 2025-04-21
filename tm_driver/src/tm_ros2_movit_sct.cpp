@@ -225,7 +225,7 @@ void TmRos2SctMoveit::set_pvt_traj(
     }
   }
   if (skip_count > 0) {
-    print_warn("TM_ROS: Traj.: skip %d points", (int)skip_count);	
+    print_warn("TM_ROS: Traj.: skip %d points", (int)skip_count);
     //RCLCPP_WARN_STREAM(rclcpp::get_logger("rclcpp"),"TM_ROS: Traj.: skip " << (int)skip_count << " points");
   }
   // last point
