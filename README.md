@@ -90,7 +90,7 @@ If the user wants to know how to use the TM ROS driver, please visit the TM ROS 
         <td><a href="https://github.com/TechmanRobotInc/tm2_ros2/tree/humble">TM2 ROS2 Humble</a></td>
         <th>&#9711;</th>
         <th>&#9711;</th>
-        <th>humble</th>      
+        <th>humble</th>
     </tr>
 </table>
 
@@ -123,7 +123,7 @@ This chapter describes that the user can use a script program to extract specifi
 
 > [!TIP]   
 > 1. If the user just want to use the TM Robot nominal model to control the robot, the user can skip the rest of this chapter.<br/>
-> 2. The tm_description package contains description files and meshes, available for the TM5S, TM7S, TM12S, TM14S, TM25S, TM30S and (without the integrated camera) TM5S-X, TM7S-X, TM12S-X, TM14S-X models.<br/>
+> 2. The tm_description package contains description files and meshes, available for TM5S, TM7S, TM12S, TM14S, TM25S, TM30S and (without the integrated camera) TM5S-X, TM7S-X, TM12S-X, TM14S-X models.<br/>
 <div> </div>
 
 ## __7. Related ROS Projects and Tutorials Usage__
@@ -133,7 +133,7 @@ See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/binary/) to instal
 - [Usage Guideline](./doc/tm_humble_extension.md)
 
 > [!TIP]  
-> Some software packages with ROS2 Humble MoveIt2 configurations for TM Cobots are available for the TM5S, TM7S, TM12S, TM14S, and TM25S models.<br/>
+> Some software packages with ROS2 Humble MoveIt2 configurations for TM Cobots are available for TM5S, TM7S, TM12S, TM14S, and TM25S models.<br/>
 <div> </div>
 
 ## __8. Contact us / Technical support__   [![Email](https://img.shields.io/badge/-Email-c14438?style=flat&logo=Gmail&logoColor=white)](mailto:tmsales@tm-robot.com)

@@ -18,7 +18,10 @@ setup(
     maintainer_email='leo.wu@tm-robot.com',
     description='tm_image',
     license='BSD-3-Clause',
-    tests_require=['pytest'],
+    # tests_require=['pytest'],
+    extras_require={        
+        'test': ['pytest'],
+    },
     entry_points={
         'console_scripts': [
             'image_talker = tm_image.image_pub:main',
