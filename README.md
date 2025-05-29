@@ -133,7 +133,7 @@ See [MoveIt2 tutorial](https://moveit.ros.org/install-moveit2/binary/) to instal
 - [Usage Guideline](./doc/tm_humble_extension.md)
 
 > [!TIP]  
-> Some software packages with ROS2 Humble MoveIt2 configurations for TM Cobots are available for TM5S, TM7S, TM12S, TM14S, and TM25S models.<br/>
+> Some software packages with ROS2 Humble MoveIt2 configurations for TM Cobots are available for TM5S, TM7S, TM12S, TM14S, TM25S, and TM30S models.<br/>
 <div> </div>
 
 ## __8. Contact us / Technical support__   [![Email](https://img.shields.io/badge/-Email-c14438?style=flat&logo=Gmail&logoColor=white)](mailto:tmsales@tm-robot.com)
