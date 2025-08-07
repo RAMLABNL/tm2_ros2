@@ -1,3 +1,8 @@
+############################################################################################### 
+# view_robot.launch.py
+# Description: Launch TM Cobot in RVIZ
+############################################################################################### 
+
 import os
 
 from ament_index_python.packages import get_package_share_directory
@@ -14,30 +19,29 @@ import xacro
 
 
 def generate_launch_description():
-    # Robot description Configuration
-    description_path = 'tm_description'
-    xacro_path = 'tm12s.urdf.xacro'
-    rviz_path = '/rviz/view_robot.rviz'     
-    
+
+    print('############################################################')
+    print('This launch file use the TM12S robot_model_file for example.')
+    print('############################################################')
+
+    # Robot Description Configuration
+    robot_model_file = 'tm12s.urdf.xacro'
+    robot_model_path = 'xacro'
+
+    # Specify the paths/directories to TM/ROS package definition
+    project_description_pkg = 'tm_description'
+    description_dir = get_package_share_directory(project_description_pkg)
+    robot_description_file = os.path.join(description_dir, robot_model_path, robot_model_file)
+    rviz_path_file = '/rviz/view_robot.rviz'
+    rviz_config_file = description_dir + rviz_path_file
+
+    # -------------------------------------------------------------------------
+    # Load the robot_description
     robot_description_config = xacro.process_file(
-        os.path.join(
-            get_package_share_directory(description_path),
-            'xacro',
-            xacro_path,
-        )
+        robot_description_file
     )
     robot_description = {'robot_description': robot_description_config.toxml()}
-
-    # RViz
-    rviz_config_file = get_package_share_directory(description_path) + rviz_path
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='log',
-        arguments=['-d', rviz_config_file],
-        parameters=[robot_description]
-        )
+    # -------------------------------------------------------------------------	
 
     # Static TF
     static_tf = Node(
@@ -49,19 +53,42 @@ def generate_launch_description():
     )
 
     # Publish TF
-    robot_state_publisher = Node(
+    robot_state_publisher_node = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
         name='robot_state_publisher',
         output='both',
-        parameters=[robot_description]
+        parameters=[
+            robot_description
+        ]
     )
 
-    # publish joint states
+    # Publish joint states
     joint_state_slider = Node(
         package='joint_state_publisher_gui',
         executable='joint_state_publisher_gui',
-        name='joint_state_publisher_gui'
+        name='joint_state_publisher_gui',
+        output=['screen']
     )
 
-    return LaunchDescription([static_tf, robot_state_publisher, joint_state_slider, rviz_node])
+    # Visualize in RViz2
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='log',
+        arguments=['-d', rviz_config_file],
+        parameters=[
+            robot_description
+        ]
+    )
+
+    # List of nodes to be launched
+    return LaunchDescription(
+        [
+            static_tf,
+            robot_state_publisher_node,
+            joint_state_slider,
+            rviz_node,
+        ]
+    )

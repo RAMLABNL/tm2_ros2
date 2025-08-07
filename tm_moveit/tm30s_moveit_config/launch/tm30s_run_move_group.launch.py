@@ -52,9 +52,9 @@ def generate_launch_description():
     # Configure robot_description
     description_path = 'tm_description'
     xacro_path = 'tm30s.urdf.xacro'
-    moveit_config_path = 'tm30s_moveit_config'    
+    moveit_config_path = 'tm30s_moveit_config'
     srdf_path = 'config/tm30s.srdf'
-    rviz_path = '/launch/run_move_group.rviz'     
+    rviz_path = '/launch/run_move_group.rviz'
     
     robot_description_config = xacro.process_file(
         os.path.join(

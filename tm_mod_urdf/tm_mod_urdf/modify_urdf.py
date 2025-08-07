@@ -70,7 +70,7 @@ def _gen_urdf(args=None):
         tm30s_nominal_restore = True
     else:
         nominal_model_restore = False
-    if nominal_model_restore is True:
+    if nominal_model_restore:
         message_s0 = 'Notice! You have chosen to restore a ' + tm_model + ' urdf model file'
         node.get_logger().info('%s!' % message_s0)
     if specific_w == '-OW':

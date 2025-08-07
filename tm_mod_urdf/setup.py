@@ -7,8 +7,7 @@ setup(
     version='2.0.0',
     packages=[package_name],
     data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
+        ('share/ament_index/resource_index/packages', ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
     install_requires=['setuptools'],
@@ -18,7 +17,7 @@ setup(
     description='tm_mod_urdf',
     license='BSD-3-Clause',
     # tests_require=['pytest'],
-    extras_require={        
+    extras_require={
         'test': ['pytest'],
     },
     entry_points={

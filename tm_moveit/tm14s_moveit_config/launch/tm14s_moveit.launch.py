@@ -49,7 +49,7 @@ def generate_launch_description():
     tm_robot_type = 'tm14s'
     description_path = 'tm_description'
     xacro_path = 'config/tm14s.urdf.xacro'
-    moveit_config_path = 'tm14s_moveit_config'    
+    moveit_config_path = 'tm14s_moveit_config'
     srdf_path = 'config/tm14s.srdf'
     rviz_path = '/rviz/moveit.rviz'
     controller_path = 'config/moveit2_controllers.yaml'
