@@ -90,9 +90,9 @@ void TmDriver::back_to_listen_node(){
 	isOnListenNode = true;
 }
 
-bool TmDriver::script_exit(const std::string &id)
+bool TmDriver::script_exit(int priority, const std::string &id)
 {
-	return (sct.send_script_str(id, TmCommand::script_exit()) == RC_OK);
+	return (sct.send_script_str(id, TmCommand::script_exit(priority)) == RC_OK);
 }
 
 bool TmDriver::set_tag(int tag, int wait, const std::string &id)
@@ -149,6 +149,15 @@ bool TmDriver::set_tool_pose_Line(const std::vector<double> &pose,
 {
 	return (sct.send_script_str(
 		id, TmCommand::set_tool_pose_Line(pose, vel, acc_time, blend_percent, fine_goal)
+	) == RC_OK);
+}
+
+bool TmDriver::set_tool_pose_Line_rel(const std::vector<double> &pose,
+		bool tool_frame,
+		double vel, double acc_time, int blend_percent, bool fine_goal, const std::string &id)
+{
+	return (sct.send_script_str(
+		id, TmCommand::set_tool_pose_Line_rel(pose, tool_frame, vel, acc_time, blend_percent, fine_goal)
 	) == RC_OK);
 }
 
@@ -323,4 +332,29 @@ bool TmDriver::set_vel_mode_stop(const std::string &id)
 bool TmDriver::set_vel_mode_target(VelMode mode, const std::vector<double> &vel, const std::string &id)
 {
 	return (sct.send_script_str_silent(id, TmCommand::set_vel_mode_target(mode, vel)) == RC_OK);
+}
+
+bool TmDriver::set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed, const std::string &id)
+{
+    std::string script = TmCommand::set_tcp_speed(linear_speed, rotational_speed);
+	print_info("TM_DRV: send set tcp speed.:\n");
+	printf("%s\n", script.c_str());
+	return (sct.send_script_str(id, script) == RC_OK);
+}
+
+bool TmDriver::change_tcp(const std::string &toolname, const std::string &id)
+{
+	return (sct.send_script_str(id, TmCommand::change_tcp(toolname)) == RC_OK);    
+}
+bool TmDriver::change_tcp(const std::vector<double> &tcp, const std::string &id)
+{
+	return (sct.send_script_str(id, TmCommand::change_tcp(tcp)) == RC_OK);
+}
+bool TmDriver::change_tcp(const std::vector<double> &tcp, double weight, const std::string &id)
+{
+	return (sct.send_script_str(id, TmCommand::change_tcp(tcp, weight)) == RC_OK);
+}
+bool TmDriver::change_tcp(const std::vector<double> &tcp, double weight, const std::vector<double> &inertia, const std::string &id)
+{
+	return (sct.send_script_str(id, TmCommand::change_tcp(tcp, weight, inertia)) == RC_OK);
 }

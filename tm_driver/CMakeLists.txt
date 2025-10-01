@@ -71,7 +71,7 @@ include_directories(include
 
 if (moveit2_lib_auto_judge) 
   if (moveit_ros_planning_interface_FOUND)
-    add_executable(tm_driver
+    add_library(tm_driver
       #src/tm_ros2_node.cpp
       src/tm_ros2_composition_moveit.cpp
       src/tm_ros2_sct.cpp
@@ -100,7 +100,7 @@ if (moveit2_lib_auto_judge)
       rclcpp_action
     )
   else()
-    add_executable(tm_driver
+    add_library(tm_driver
       src/tm_ros2_composition.cpp
       src/tm_ros2_sct.cpp
       src/tm_ros2_svr.cpp
@@ -125,7 +125,7 @@ if (moveit2_lib_auto_judge)
     )
   endif (moveit_ros_planning_interface_FOUND)
 else()
-  add_executable(tm_driver
+  add_library(tm_driver
     src/tm_ros2_composition.cpp
     src/tm_ros2_sct.cpp
     src/tm_ros2_svr.cpp
@@ -149,15 +149,21 @@ else()
     tf2_geometry_msgs
   )
 endif()
-  
-install(TARGETS
-  tm_driver
-  DESTINATION lib/${PROJECT_NAME}
+
+ament_export_targets(export_tm_driver HAS_LIBRARY_TARGET)
+
+install(DIRECTORY include/
+  DESTINATION include
 )
 
-install(
-  DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
+
+install(TARGETS
+  tm_driver
+  EXPORT export_tm_driver
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+  RUNTIME DESTINATION bin
+  INCLUDES DESTINATION include
 )
 
 ament_package()
