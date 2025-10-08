@@ -27,12 +27,12 @@ public:
 	};
 private:
 	std::map<std::string, Item> _item_map;
-
+	const TmRobotStateData *_rsd;
 public:
 	TmDataTable(TmRobotState *rs)
 	{
 		print_debug("Create DataTable");
-
+		_rsd = &rs->tmRobotStateDataFromEthernet;
 		_item_map.clear();
 		//_item_map[""] = { Item:, &rs- };
 		_item_map["Robot_Link"         ] = { &rs->tmRobotStateDataFromEthernet.is_linked };
@@ -110,6 +110,7 @@ public:
 	std::map<std::string, Item>  & get() { return _item_map; }
 	std::map<std::string, Item>::iterator find(const std::string &name) { return _item_map.find(name); }
 	std::map<std::string, Item>::iterator end() { return _item_map.end(); }
+	const TmRobotStateData* get_rsd() { return _rsd; }
 };
 
 TmRobotState::TmRobotState()
@@ -305,7 +306,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size)
 	}
 
 	multiThreadCache.set_catch_data(tmRobotStateDataFromEthernet);
-
+	tmRobotStateDataToPublish = *_data_table->get_rsd();
 	if (boffset > size) {
 	}
 	return boffset;
