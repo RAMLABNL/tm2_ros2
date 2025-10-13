@@ -1,3 +1,4 @@
+#include <ios>
 #ifdef NO_INCLUDE_DIR
 #include "tm_command.h"
 #else
@@ -80,8 +81,8 @@ std::string TmCommand::set_tool_pose_Line(const std::vector<double> &pose,
 	double vel, double acc_time, int blend_percent, bool fine_goal, int precision)
 {
 	auto pose_mmdeg = mmdeg_pose(pose);
-	int vel_mm = int(1000.0 * vel);
-	int acct_ms = int(1000.0 * acc_time);
+	int vel_mm = static_cast<int>( std::round(1000.0 * vel));
+	int acct_ms = static_cast<int>( std::round(1000.0 * acc_time));
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(precision);
 	ss << "Line(\"CAP\",";
@@ -202,7 +203,9 @@ std::string TmCommand::set_vel_mode_target(VelMode mode, const std::vector<doubl
 std::string TmCommand::set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed)
 {
 	std::stringstream ss;
-	ss << "SetTCPSpeed(" << linear_speed << "," << rotational_speed << ")";
+	ss << "SetTCPSpeedLimit(";
+    ss << std::boolalpha << true;
+    ss << "," << linear_speed << "," << rotational_speed << ")";
 	return ss.str();
 }
 
