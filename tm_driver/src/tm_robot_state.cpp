@@ -117,7 +117,7 @@ public:
 TmRobotState::TmRobotState()
 {
 	print_debug("TmRobotState::TmRobotState");
-
+	std::memset(&tmRobotStateDataFromEthernet.robot_model[0], 0, sizeof(tmRobotStateDataFromEthernet.robot_model));
 	_data_table = new TmDataTable(this);
 
 	_f_deserialize_item[0] = std::bind(&TmRobotState::_deserialize_skip,
