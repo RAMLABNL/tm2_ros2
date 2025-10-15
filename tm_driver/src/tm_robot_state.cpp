@@ -106,6 +106,7 @@ public:
 		_item_map["End_AO1"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AO[1],Item::NOT_REQUIRE };
 		_item_map["End_AI0"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AI[0] };
 		_item_map["End_AI1"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AI[1],Item::NOT_REQUIRE };
+		_item_map["Robot_Model"        ] = { &rs->tmRobotStateDataFromEthernet.robot_model};
 	}
 	std::map<std::string, Item>  & get() { return _item_map; }
 	std::map<std::string, Item>::iterator find(const std::string &name) { return _item_map.find(name); }
@@ -307,6 +308,12 @@ size_t TmRobotState::_deserialize(const char *data, size_t size)
 
 	multiThreadCache.set_catch_data(tmRobotStateDataFromEthernet);
 	tmRobotStateDataToPublish = *_data_table->get_rsd();
+	static constexpr bool print_model = true;
+	if (print_model) {
+		print_model = false;
+		auto msg = std::string("Robot model is: ") + tmRobotStateDataFromEthernet.robot_model;
+		print_info(msg.c_str());
+	}
 	if (boffset > size) {
 	}
 	return boffset;
