@@ -308,7 +308,7 @@ size_t TmRobotState::_deserialize(const char *data, size_t size)
 
 	multiThreadCache.set_catch_data(tmRobotStateDataFromEthernet);
 	tmRobotStateDataToPublish = *_data_table->get_rsd();
-	static constexpr bool print_model = true;
+	static bool print_model = true;
 	if (print_model) {
 		print_model = false;
 		auto msg = std::string("Robot model is: ") + tmRobotStateDataFromEthernet.robot_model;
