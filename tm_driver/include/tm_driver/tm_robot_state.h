@@ -7,6 +7,7 @@
 #include <string>
 #include <mutex>
 #include <functional>
+#include <optional>
 #include "tm_driver_utilities.h"
 
 struct TmRobotStateData
@@ -98,7 +99,7 @@ public:
 	unsigned char is_EStop() { return tmRobotStateDataToPublish.is_ESTOP_pressed; }
 	unsigned char camera_light() { return tmRobotStateDataToPublish.camera_light; } // R/W
 	int error_code() { return tmRobotStateDataToPublish.error_code; }
-	std::string robot_model() { return tmRobotStateDataToPublish.robot_model; }
+	std::optional<std::string> robot_model() const;
 	std::string error_content() { return ""; }
 
 	std::vector<double> flange_pose() { 

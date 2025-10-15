@@ -106,7 +106,7 @@ public:
 		_item_map["End_AO1"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AO[1],Item::NOT_REQUIRE };
 		_item_map["End_AI0"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AI[0] };
 		_item_map["End_AI1"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AI[1],Item::NOT_REQUIRE };
-		_item_map["Robot_Model"        ] = { &rs->tmRobotStateDataFromEthernet.robot_model};
+		_item_map["Robot_Model"        ] = { &rs->tmRobotStateDataFromEthernet.robot_model,Item::NOT_REQUIRE};
 	}
 	std::map<std::string, Item>  & get() { return _item_map; }
 	std::map<std::string, Item>::iterator find(const std::string &name) { return _item_map.find(name); }
@@ -281,7 +281,7 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size)
 	for (auto iter : _data_table->get()) {
 		if (iter.second.required && !iter.second.checked) {
 			isDataTableCorrect = false;
-			std::string msg = "Required item" + iter.first + " is NOT checked";
+			std::string msg = "Required item " + iter.first + " is NOT checked";
 			print_error(msg.c_str());
 		}
 	}
@@ -309,9 +309,11 @@ size_t TmRobotState::_deserialize(const char *data, size_t size)
 	multiThreadCache.set_catch_data(tmRobotStateDataFromEthernet);
 	tmRobotStateDataToPublish = *_data_table->get_rsd();
 	static bool print_model = true;
-	if (print_model) {
+	const auto model = robot_model();
+
+	if (print_model && model.has_value()) {
 		print_model = false;
-		auto msg = std::string("Robot model is: ") + tmRobotStateDataFromEthernet.robot_model;
+		auto msg = std::string("Robot model is: ") + model.value();
 		print_info(msg.c_str());
 	}
 	if (boffset > size) {
@@ -325,4 +327,13 @@ void TmRobotState::update_tm_robot_publish_state(){
 
 void TmRobotState::set_receive_state(TmCommRC state){
 	_receive_state = state;
+}
+
+std::optional<std::string> TmRobotState::robot_model() const 
+{
+	auto robot_name_item_it = _data_table->find("Robot_Model");
+	if (robot_name_item_it == _data_table->end() || !robot_name_item_it->second.checked) {
+		return std::nullopt;
+	}
+	return tmRobotStateDataFromEthernet.robot_model;
 }
