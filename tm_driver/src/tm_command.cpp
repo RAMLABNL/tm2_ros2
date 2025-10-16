@@ -204,7 +204,7 @@ std::string TmCommand::set_tcp_speed(uint32_t linear_speed, uint32_t rotational_
 {
 	std::stringstream ss;
 	const std::string cmd = is_model_s ? "SetTCPSpeedLimit(true," : "SetTCPSpeed(";
-    ss << linear_speed << "," << rotational_speed << ")";
+    ss << cmd << linear_speed << "," << rotational_speed << ")";
 	return ss.str();
 }
 
