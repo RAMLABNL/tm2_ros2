@@ -100,6 +100,7 @@ public:
 	unsigned char camera_light() { return tmRobotStateDataToPublish.camera_light; } // R/W
 	int error_code() { return tmRobotStateDataToPublish.error_code; }
 	std::optional<std::string> robot_model() const;
+	std::optional<bool> is_model_s() const;
 	std::string error_content() { return ""; }
 
 	std::vector<double> flange_pose() { 

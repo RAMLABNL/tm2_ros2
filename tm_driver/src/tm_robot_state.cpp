@@ -337,3 +337,12 @@ std::optional<std::string> TmRobotState::robot_model() const
 	}
 	return tmRobotStateDataFromEthernet.robot_model;
 }
+
+std::optional<bool> TmRobotState::is_model_s() const
+{
+	auto model = robot_model();
+	if (!model.has_value()) {
+		return std::nullopt;
+	}
+	return model.value().find("S-") != std::string::npos;
+}
