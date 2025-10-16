@@ -336,7 +336,7 @@ bool TmDriver::set_vel_mode_target(VelMode mode, const std::vector<double> &vel,
 
 bool TmDriver::set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed, const std::string &id)
 {
-    std::string script = TmCommand::set_tcp_speed(linear_speed, rotational_speed);
+    std::string script = TmCommand::set_tcp_speed(linear_speed, rotational_speed, _is_model_s);
 	print_info("TM_DRV: send set tcp speed.:\n");
 	printf("%s\n", script.c_str());
 	return (sct.send_script_str(id, script) == RC_OK);

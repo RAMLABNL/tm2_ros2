@@ -29,6 +29,7 @@ private:
 	double _max_payload = 4.0;
 	bool isOnListenNode = false;
 	bool connect_recovery_is_halt = false; //false: do the recovery; true: stop the recovery
+	bool _is_model_s = false;
 
 public:
 	explicit TmDriver(const std::string &ip);
@@ -55,7 +56,7 @@ public:
 	void set_this_max_velocity(double max_vel) { _max_velocity = max_vel; }
 	void set_this_max_tcp_speed(double max_spd) { _max_tcp_speed = max_spd; }
 	void set_this_max_payload(double payload) { _max_payload = payload; }
-
+	void set_is_model_s(bool is_model_s) { _is_model_s = is_model_s; }
 	////////////////////////////////
 	// SVR Robot Function (write_XXX)
 	////////////////////////////////

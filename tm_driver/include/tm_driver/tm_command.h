@@ -167,7 +167,7 @@ public:
     rotational_speed : in degrees per second
 
     More details please refer to Jakub Sikorski (jakub@ramlab.com) */
-    static std::string set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed);
+    static std::string set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed, bool is_model_s);
 
 	/*  Changing the TCP of the robot
 	More details please refer to the TM_Robot_Expression.pdf Chapter 8.14 */    

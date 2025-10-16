@@ -332,7 +332,7 @@ void TmRobotState::set_receive_state(TmCommRC state){
 std::optional<std::string> TmRobotState::robot_model() const 
 {
 	auto robot_name_item_it = _data_table->find("Robot_Model");
-	if (robot_name_item_it == _data_table->end() || !robot_name_item_it->second.checked) {
+	if (robot_name_item_it == _data_table->end() || !robot_name_item_it->second.checked || tmRobotStateDataFromEthernet.robot_model[0] == '\0') {
 		return std::nullopt;
 	}
 	return tmRobotStateDataFromEthernet.robot_model;
