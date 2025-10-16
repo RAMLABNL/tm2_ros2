@@ -203,10 +203,8 @@ std::string TmCommand::set_vel_mode_target(VelMode mode, const std::vector<doubl
 std::string TmCommand::set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed, bool is_model_s)
 {
 	std::stringstream ss;
-	const std::string cmd = is_model_s ? "SetTCPSpeedLimit" : "SetTCPSpeed";
-	ss << cmd << "(";
-    ss << std::boolalpha << true;
-    ss << "," << linear_speed << "," << rotational_speed << ")";
+	const std::string cmd = is_model_s ? "SetTCPSpeedLimit(true," : "SetTCPSpeed(";
+    ss << linear_speed << "," << rotational_speed << ")";
 	return ss.str();
 }
 
