@@ -81,13 +81,16 @@ std::string TmCommand::set_tool_pose_Line(const std::vector<double> &pose,
 	double vel, double acc_time, int blend_percent, bool fine_goal, int precision)
 {
 	auto pose_mmdeg = mmdeg_pose(pose);
-	int vel_mm = static_cast<int>( std::round(1000.0 * vel));
+	// int vel_mm = static_cast<int>( std::round(1000.0 * vel));
+
+    double vel_mm = 1000.0 * vel;
 	int acct_ms = static_cast<int>( std::round(1000.0 * acc_time));
+
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(precision);
 	ss << "Line(\"CAP\",";
 	for (auto &value : pose_mmdeg) { ss << value << ","; }
-	ss << vel_mm << "," << acct_ms << "," << blend_percent << ",";
+	ss << std::setprecision(precision) << vel_mm << "," << acct_ms << "," << blend_percent << ",";
 	ss << std::boolalpha <<fine_goal << ")";
 	return ss.str();
 }

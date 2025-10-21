@@ -8,6 +8,7 @@
 #include <mutex>
 #include <functional>
 #include <optional>
+#include <span>
 #include "tm_driver_utilities.h"
 
 struct TmRobotStateData
@@ -39,14 +40,14 @@ struct TmRobotStateData
 	int ma_mode = 0;
 	char stick_play_pause;
 	int32_t robot_light = 0;
-	unsigned char ctrller_DO[16];
-	unsigned char ctrller_DI[16];
-	float ctrller_AO[2];
-	float ctrller_AI[2];
-	unsigned char ee_DO[4];
-	unsigned char ee_DI[4];
-	float ee_AO[2];
-	float ee_AI[2];
+	std::array<unsigned char, 16> ctrller_DO{0};
+	std::array<unsigned char, 16> ctrller_DI{0};
+	std::array<float, 2> ctrller_AO{0};
+	std::array<float, 2> ctrller_AI{0};
+	std::array<unsigned char, 4> ee_DO{0};
+	std::array<unsigned char, 4> ee_DI{0};
+    std::array<float, 2> ee_AO{0};
+    std::array<float, 2> ee_AI{0};
 	char robot_model[16];
 };
 
@@ -174,47 +175,27 @@ public:
 	int32_t robot_light() { return tmRobotStateDataToPublish.robot_light; }
 
 	std::vector<unsigned char> ctrller_DO(){
-		std::vector<unsigned char>  ctrllerDO;
-		ctrllerDO.assign(8, 0); 
-		for (int i = 0; i < 8; ++i) { ctrllerDO[i] = tmRobotStateDataToPublish.ctrller_DO[i]; }
-		return ctrllerDO;
+		return std::vector<unsigned char>  (tmRobotStateDataToPublish.ctrller_DO.begin(), tmRobotStateDataToPublish.ctrller_DO.end());
 	}
 	std::vector<unsigned char> ctrller_DI() {
-		std::vector<unsigned char>  ctrllerDI;
-		ctrllerDI.assign(8, 0);
-		for (int i = 0; i < 8; ++i) { ctrllerDI[i] = tmRobotStateDataToPublish.ctrller_DI[i]; }
-	    return ctrllerDI; 
+	    return std::vector<unsigned char>  (tmRobotStateDataToPublish.ctrller_DI.begin(), tmRobotStateDataToPublish.ctrller_DI.end());
 	}
 	std::vector<float> ctrller_AO(){
-		std::vector<float>  ctrllerAO;
-		ctrllerAO.assign(1, 0.0);
-		for (int i = 0; i < 1; ++i) { ctrllerAO[i] = tmRobotStateDataToPublish.ctrller_AO[i]; }
-	    return ctrllerAO; 
+		return std::vector<float>  (tmRobotStateDataToPublish.ctrller_AO.begin(), tmRobotStateDataToPublish.ctrller_AO.end());
 	}
 	std::vector<float> ctrller_AI(){
-        std::vector<float>  ctrllerAI;
-		ctrllerAI.assign(2, 0.0);
-		for (int i = 0; i < 2; ++i) { ctrllerAI[i] = tmRobotStateDataToPublish.ctrller_AI[i]; }
-	    return ctrllerAI; 
-	}
+        return std::vector<float>  (tmRobotStateDataToPublish.ctrller_AI.begin(), tmRobotStateDataToPublish.ctrller_AI.end());
+    }
 	std::vector<unsigned char> ee_DO(){
-		std::vector<unsigned char>  eeDO;
-		eeDO.assign(4, 0);
-		for (int i = 0; i < 4; ++i) { eeDO[i] = tmRobotStateDataToPublish.ee_DO[i]; }
-	    return eeDO; 
+        return std::vector<unsigned char>  (tmRobotStateDataToPublish.ee_DO.begin(), tmRobotStateDataToPublish.ee_DO.end());
 	}
 	std::vector<unsigned char> ee_DI(){
-		std::vector<unsigned char>  eeDI;
-		eeDI.assign(4, 0);
-		for (int i = 0; i < 4; ++i) { eeDI[i] = tmRobotStateDataToPublish.ee_DI[i]; }
-	    return eeDI; 
-	}	
-	std::vector<float> ee_AI(){
-        std::vector<float>  eeAI;
-		eeAI.assign(1, 0.0);
-		for (int i = 0; i < 1; ++i) { eeAI[i] = tmRobotStateDataToPublish.ee_AI[i]; }
-	    return eeAI; 
+		return std::vector<unsigned char>  (tmRobotStateDataToPublish.ee_DI.begin(), tmRobotStateDataToPublish.ee_DI.end());
 	}
+	std::vector<float> ee_AI(){
+        return std::vector<float>  (tmRobotStateDataToPublish.ee_AI.begin(), tmRobotStateDataToPublish.ee_AI.end());
+	}
+
 	
     TmCommRC get_receive_state(){return _receive_state;}
 
