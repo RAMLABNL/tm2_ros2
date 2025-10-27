@@ -1,3 +1,4 @@
+#include <ios>
 #ifdef NO_INCLUDE_DIR
 #include "tm_command.h"
 #else
@@ -80,14 +81,34 @@ std::string TmCommand::set_tool_pose_Line(const std::vector<double> &pose,
 	double vel, double acc_time, int blend_percent, bool fine_goal, int precision)
 {
 	auto pose_mmdeg = mmdeg_pose(pose);
-	int vel_mm = int(1000.0 * vel);
-	int acct_ms = int(1000.0 * acc_time);
+	// int vel_mm = static_cast<int>( std::round(1000.0 * vel));
+
+    double vel_mm = 1000.0 * vel;
+	int acct_ms = static_cast<int>( std::round(1000.0 * acc_time));
+
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(precision);
 	ss << "Line(\"CAP\",";
 	for (auto &value : pose_mmdeg) { ss << value << ","; }
-	ss << vel_mm << "," << acct_ms << "," << blend_percent << ",";
+	ss << std::setprecision(precision) << vel_mm << "," << acct_ms << "," << blend_percent << ",";
 	ss << std::boolalpha <<fine_goal << ")";
+	return ss.str();
+}
+
+std::string TmCommand::set_tool_pose_Line_rel(const std::vector<double> &pose,
+	bool tool_frame,
+	double vel, double acc_time, int blend_percent, bool fine_goal, int precision)
+{
+	auto pose_mmdeg = mmdeg_pose(pose);
+	int vel_mm = int(1000.0 * vel);
+	int acct_ms = int(1000.0 * acc_time);
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(precision);
+	std::string frame = tool_frame ? "T" : "C";
+	ss << "Move_Line(\"" << frame << "AP\",";
+	for (auto &value : pose_mmdeg) { ss << value << ","; }
+	ss << vel_mm << "," << acct_ms << "," << blend_percent << ",";
+	ss << std::boolalpha << fine_goal << ")";
 	return ss.str();
 }
 
@@ -179,5 +200,49 @@ std::string TmCommand::set_vel_mode_target(VelMode mode, const std::vector<doubl
 		}
 		ss << ")";
 	}
+	return ss.str();
+}
+
+std::string TmCommand::set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed, bool is_model_s)
+{
+	std::stringstream ss;
+	const std::string cmd = is_model_s ? "SetTCPSpeedLimit(true," : "SetTCPSpeed(";
+    ss << cmd << linear_speed << "," << rotational_speed << ")";
+	return ss.str();
+}
+
+std::string TmCommand::change_tcp(const std::string &toolname)
+{
+	std::stringstream ss;
+	ss << "ChangeTCP(\"" << toolname << "\")";
+	return ss.str();
+}
+std::string TmCommand::change_tcp(const std::vector<double> &tcp)
+{
+	std::stringstream ss;
+	ss << "ChangeTCP(";
+    ss << tcp[0] << "," << tcp[1] << "," << tcp[2] << "," << deg(tcp[3]) << "," << deg(tcp[4])  << "," << deg(tcp[5]);
+    ss << ")";
+	return ss.str();
+}
+std::string TmCommand::change_tcp(const std::vector<double> &tcp, double weight)
+{
+	std::stringstream ss;
+	ss << "ChangeTCP(";
+    ss << tcp[0] << "," << tcp[1] << "," << tcp[2] << "," << deg(tcp[3]) << "," << deg(tcp[4])  << "," << deg(tcp[5]);
+    ss << "," << weight;
+    ss << ")";
+	return ss.str();
+}
+std::string TmCommand::change_tcp(const std::vector<double> &tcp, double weight, const std::vector<double> &inertia)
+{
+	std::stringstream ss;
+	ss << "ChangeTCP(";
+    ss << tcp[0] << "," << tcp[1] << "," << tcp[2] << "," << deg(tcp[3]) << "," << deg(tcp[4])  << "," << deg(tcp[5]);
+    ss << "," << weight;
+    ss << "," << inertia[0] << "," << inertia[1] << "," << inertia[2];
+    ss << "," << inertia[3] << "," << inertia[4] << "," << inertia[5];
+    ss << "," << deg(inertia[6]) << "," << deg(inertia[7]) << "," << deg(inertia[8]);
+    ss << ")";
 	return ss.str();
 }

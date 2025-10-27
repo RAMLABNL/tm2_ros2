@@ -29,6 +29,7 @@ private:
 	double _max_payload = 4.0;
 	bool isOnListenNode = false;
 	bool connect_recovery_is_halt = false; //false: do the recovery; true: stop the recovery
+	bool _is_model_s = false;
 
 public:
 	explicit TmDriver(const std::string &ip);
@@ -55,7 +56,7 @@ public:
 	void set_this_max_velocity(double max_vel) { _max_velocity = max_vel; }
 	void set_this_max_tcp_speed(double max_spd) { _max_tcp_speed = max_spd; }
 	void set_this_max_payload(double payload) { _max_payload = payload; }
-
+	void set_is_model_s(bool is_model_s) { _is_model_s = is_model_s; }
 	////////////////////////////////
 	// SVR Robot Function (write_XXX)
 	////////////////////////////////
@@ -65,7 +66,7 @@ public:
 	// SCT Robot Function (set_XXX)
 	////////////////////////////////
 	bool is_on_listen_node();
-	bool script_exit(const std::string &id = "Exit");
+	bool script_exit(int priority = -1, const std::string &id = "Exit");
 	bool set_tag(int tag, int wait = 0, const std::string &id = "Tag");
 	bool set_wait_tag(int tag, int timeout_ms = 0, const std::string &id = "WaitTag");
 	bool set_stop(int level=-1, const std::string &id = "Stop");
@@ -81,6 +82,9 @@ public:
 		double vel, double acc_time, int blend_percent, bool fine_goal = false, const std::string &id = "PTPT");
 	bool set_tool_pose_Line(const std::vector<double> &pose,
 		double vel, double acc_time, int blend_percent, bool fine_goal = false, const std::string &id = "Line");
+	bool set_tool_pose_Line_rel(const std::vector<double> &pose,
+		bool tool_frame,
+		double vel, double acc_time, int blend_percent, bool fine_goal = false, const std::string &id = "LineRel");
 	// set_tool_pose_PLINE
 
 	//
@@ -107,4 +111,12 @@ public:
 	bool set_vel_mode_start(VelMode mode, double timeout_zero_vel, double timeout_stop, const std::string &id = "VModeStart");
 	bool set_vel_mode_stop(const std::string &id = "VModeStop");
 	bool set_vel_mode_target(VelMode mode, const std::vector<double> &vel, const std::string &id = "VModeTrgt");
+
+
+    bool set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed, const std::string &id = "SetTCPSpeed");
+
+	bool change_tcp(const std::string &toolname, const std::string &id = "ChangeTCP");
+	bool change_tcp(const std::vector<double> &tcp, const std::string &id = "ChangeTCP");
+	bool change_tcp(const std::vector<double> &tcp, double weight, const std::string &id = "ChangeTCP");
+	bool change_tcp(const std::vector<double> &tcp, double weight, const std::vector<double> &inertia, const std::string &id = "ChangeTCP");
 };

@@ -73,7 +73,15 @@ public:
 /* 
 	Leaving external control mode.
 	More Detail please refer to the TM_Robot_Expression.pdf Chapter 8.2 */
-	static std::string script_exit() { return "ScriptExit()"; }
+	static std::string script_exit(int priority = -1) 
+	{ 
+	std::string prio_str = "";
+	if (priority >= 0)
+	{
+		prio_str = std::to_string(priority);
+	}
+	return "ScriptExit(" + prio_str + ")";
+	}
 	
 //	More details please refer to the TM_Robot_Expression.pdf Chapter 9.1
 	static std::string set_tag(int tag, int wait = 0);
@@ -116,6 +124,9 @@ public:
 	static std::string set_tool_pose_Line(const std::vector<double> &pose,
 		double vel, double acc_time, int blend_percent, bool fine_goal, int precision = 5);
 
+	static std::string set_tool_pose_Line_rel(const std::vector<double> &pose,
+		bool tool_frame, double vel, double acc_time, int blend_percent, bool fine_goal, int precision = 5);
+
 /*	PVT start.
 	More details please refer to the TM_Robot_Expression.pdf Chapter 9.16 */
 	static std::string set_pvt_enter(int mode) { return "PVTEnter(" + std::to_string(mode) + ")"; }
@@ -149,4 +160,19 @@ public:
 	static std::string set_vel_mode_start(VelMode mode, double timeout_zero_vel, double timeout_stop);
 	static std::string set_vel_mode_stop() { return "StopContinueVmode()"; }
 	static std::string set_vel_mode_target(VelMode mode, const std::vector<double> &vel, int precision = 5);
+
+	/*
+    Sets the maximum speed of the robot during motion commands.
+    linear_speed : not implemented yet. The number must be >0
+    rotational_speed : in degrees per second
+
+    More details please refer to Jakub Sikorski (jakub@ramlab.com) */
+    static std::string set_tcp_speed(uint32_t linear_speed, uint32_t rotational_speed, bool is_model_s);
+
+	/*  Changing the TCP of the robot
+	More details please refer to the TM_Robot_Expression.pdf Chapter 8.14 */    
+    static std::string change_tcp(const std::string &toolname);
+    static std::string change_tcp(const std::vector<double> &tcp);
+    static std::string change_tcp(const std::vector<double> &tcp, double weight);
+    static std::string change_tcp(const std::vector<double> &tcp, double weight, const std::vector<double> &inertia);
 };

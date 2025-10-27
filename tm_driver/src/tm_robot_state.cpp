@@ -27,12 +27,12 @@ public:
 	};
 private:
 	std::map<std::string, Item> _item_map;
-
+	const TmRobotStateData *_rsd;
 public:
 	TmDataTable(TmRobotState *rs)
 	{
 		print_debug("Create DataTable");
-
+		_rsd = &rs->tmRobotStateDataFromEthernet;
 		_item_map.clear();
 		//_item_map[""] = { Item:, &rs- };
 		_item_map["Robot_Link"         ] = { &rs->tmRobotStateDataFromEthernet.is_linked };
@@ -106,16 +106,18 @@ public:
 		_item_map["End_AO1"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AO[1],Item::NOT_REQUIRE };
 		_item_map["End_AI0"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AI[0] };
 		_item_map["End_AI1"            ] = { &rs->tmRobotStateDataFromEthernet.ee_AI[1],Item::NOT_REQUIRE };
+		_item_map["Robot_Model"        ] = { &rs->tmRobotStateDataFromEthernet.robot_model,Item::NOT_REQUIRE};
 	}
 	std::map<std::string, Item>  & get() { return _item_map; }
 	std::map<std::string, Item>::iterator find(const std::string &name) { return _item_map.find(name); }
 	std::map<std::string, Item>::iterator end() { return _item_map.end(); }
+	const TmRobotStateData* get_rsd() { return _rsd; }
 };
 
 TmRobotState::TmRobotState()
 {
 	print_debug("TmRobotState::TmRobotState");
-
+	std::memset(&tmRobotStateDataFromEthernet.robot_model[0], 0, sizeof(tmRobotStateDataFromEthernet.robot_model));
 	_data_table = new TmDataTable(this);
 
 	_f_deserialize_item[0] = std::bind(&TmRobotState::_deserialize_skip,
@@ -279,7 +281,7 @@ size_t TmRobotState::_deserialize_first_time(const char *data, size_t size)
 	for (auto iter : _data_table->get()) {
 		if (iter.second.required && !iter.second.checked) {
 			isDataTableCorrect = false;
-			std::string msg = "Required item" + iter.first + " is NOT checked";
+			std::string msg = "Required item " + iter.first + " is NOT checked";
 			print_error(msg.c_str());
 		}
 	}
@@ -305,7 +307,18 @@ size_t TmRobotState::_deserialize(const char *data, size_t size)
 	}
 
 	multiThreadCache.set_catch_data(tmRobotStateDataFromEthernet);
+	{
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		tmRobotStateDataToPublish = *_data_table->get_rsd();
+	}
+	static bool print_model = true;
+	const auto model = robot_model();
 
+	if (print_model && model.has_value()) {
+		print_model = false;
+		auto msg = std::string("Robot model is: ") + model.value();
+		print_info(msg.c_str());
+	}
 	if (boffset > size) {
 	}
 	return boffset;
@@ -317,4 +330,23 @@ void TmRobotState::update_tm_robot_publish_state(){
 
 void TmRobotState::set_receive_state(TmCommRC state){
 	_receive_state = state;
+}
+
+std::optional<std::string> TmRobotState::robot_model() const 
+{
+	std::lock_guard<std::mutex> lck(_deserialize_mtx);
+	auto robot_name_item_it = _data_table->find("Robot_Model");
+	if (robot_name_item_it == _data_table->end() || !robot_name_item_it->second.checked || tmRobotStateDataFromEthernet.robot_model[0] == '\0') {
+		return std::nullopt;
+	}
+	return tmRobotStateDataFromEthernet.robot_model;
+}
+
+std::optional<bool> TmRobotState::is_model_s() const
+{
+	auto model = robot_model();
+	if (!model.has_value()) {
+		return std::nullopt;
+	}
+	return model.value().find("S-") != std::string::npos;
 }
