@@ -307,7 +307,10 @@ size_t TmRobotState::_deserialize(const char *data, size_t size)
 	}
 
 	multiThreadCache.set_catch_data(tmRobotStateDataFromEthernet);
-	tmRobotStateDataToPublish = *_data_table->get_rsd();
+	{
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		tmRobotStateDataToPublish = *_data_table->get_rsd();
+	}
 	static bool print_model = true;
 	const auto model = robot_model();
 
@@ -331,6 +334,7 @@ void TmRobotState::set_receive_state(TmCommRC state){
 
 std::optional<std::string> TmRobotState::robot_model() const 
 {
+	std::lock_guard<std::mutex> lck(_deserialize_mtx);
 	auto robot_name_item_it = _data_table->find("Robot_Model");
 	if (robot_name_item_it == _data_table->end() || !robot_name_item_it->second.checked || tmRobotStateDataFromEthernet.robot_model[0] == '\0') {
 		return std::nullopt;

@@ -275,4 +275,5 @@ public:
 	void set_receive_state(TmCommRC state);
 	void update_tm_robot_publish_state();
 	void print();
+	mutable std::mutex _deserialize_mtx;
 };
