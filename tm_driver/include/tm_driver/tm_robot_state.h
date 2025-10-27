@@ -91,109 +91,171 @@ public:
 	~TmRobotState();
 
 public:
-	unsigned char is_linked() { return tmRobotStateDataToPublish.is_linked; }
-	unsigned char has_error() { return tmRobotStateDataToPublish.has_error; }
-	bool is_data_table_correct() { return isDataTableCorrect; }
-	unsigned char is_project_running() { return tmRobotStateDataToPublish.is_proj_running; }
-	unsigned char is_project_paused() { return tmRobotStateDataToPublish.is_proj_paused; }
-	unsigned char is_safeguard_A() { return tmRobotStateDataToPublish.is_safeguard_A_triggered; }
-	unsigned char is_EStop() { return tmRobotStateDataToPublish.is_ESTOP_pressed; }
-	unsigned char camera_light() { return tmRobotStateDataToPublish.camera_light; } // R/W
-	int error_code() { return tmRobotStateDataToPublish.error_code; }
+	unsigned char is_linked() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.is_linked; 
+	}
+	unsigned char has_error() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.has_error; 
+	}
+	bool is_data_table_correct() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return isDataTableCorrect; 
+	}
+	unsigned char is_project_running() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.is_proj_running; 
+	}
+	unsigned char is_project_paused() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.is_proj_paused; 
+	}
+	unsigned char is_safeguard_A() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.is_safeguard_A_triggered; 
+	}
+	unsigned char is_EStop() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.is_ESTOP_pressed; 
+	}
+	unsigned char camera_light() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.camera_light; 
+	} // R/W
+	int error_code() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.error_code; 
+	}
 	std::optional<std::string> robot_model() const;
 	std::optional<bool> is_model_s() const;
-	std::string error_content() { return ""; }
+	std::string error_content() const { return ""; }
 
-	std::vector<double> flange_pose() { 
+	std::vector<double> flange_pose() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  flangePose;
 		flangePose.assign(6, 0.0);
 		si_pose(flangePose, tmRobotStateDataToPublish.flange_pose, 6);
 		return flangePose;
 	}
-	std::vector<double> joint_angle(){
+	std::vector<double> joint_angle() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  jointAngle;
 		jointAngle.assign(6, 0.0);
 		jointAngle = rads(tmRobotStateDataToPublish.joint_angle, 6);
 		return jointAngle;
 	}
-	std::vector<double> tool_pose(){
+	std::vector<double> tool_pose() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  toolPose;
 		toolPose.assign(6, 0.0);
 		si_pose(toolPose, tmRobotStateDataToPublish.tool_pose, 6);
 		return toolPose;
 	}
-	std::vector<double> tcp_force_vec(){
+	std::vector<double> tcp_force_vec() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  tcpForceVec;
 		tcpForceVec.assign(3, 0.0);
 		for (int i = 0; i < 3; ++i) { tcpForceVec[i] = double(tmRobotStateDataToPublish.tcp_force_vec[i]); }
 		return tcpForceVec;
 	}
-	double tcp_force() { 
+	double tcp_force() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		return tmRobotStateDataToPublish.tcp_force; 
 	}
-	std::vector<double> tcp_speed_vec(){
+	std::vector<double> tcp_speed_vec() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  tcpSpeedVec;
 		tcpSpeedVec.assign(6, 0.0);
 		si_pose(tcpSpeedVec, tmRobotStateDataToPublish.tcp_speed_vec, 6);
 		return tcpSpeedVec;
 	}
-	double tcp_speed() { return tmRobotStateDataToPublish.tcp_speed; }
-	std::vector<double> joint_speed(){
+	double tcp_speed() const 
+	{ 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.tcp_speed; 
+	}
+	std::vector<double> joint_speed() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  jointSpeed;
 		jointSpeed.assign(6, 0.0);
 		jointSpeed = rads( tmRobotStateDataToPublish.joint_speed, 6);
 		return jointSpeed;
-	} 
-	std::vector<double> joint_torque(){
+	}
+
+	std::vector<double> joint_torque() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  jointTorque;
 		jointTorque.assign(6, 0.0);
 		jointTorque = meters( tmRobotStateDataToPublish.joint_torque, 6);
 		return jointTorque;
 	}
-	std::vector<double> joint_torque_average(){
+	std::vector<double> joint_torque_average() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  jointTorqueAverage;
 		jointTorqueAverage.assign(6, 0.0);
 		jointTorqueAverage = meters( tmRobotStateDataToPublish.joint_torque_average, 6);
 		return jointTorqueAverage;
 	}
-	std::vector<double> joint_torque_min() {
+	std::vector<double> joint_torque_min() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  jointTorqueMin;
 		jointTorqueMin.assign(6, 0.0);
 		jointTorqueMin = meters( tmRobotStateDataToPublish.joint_torque_min, 6);
 		return jointTorqueMin;
 	}
-	std::vector<double> joint_torque_max() {
+	std::vector<double> joint_torque_max() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		std::vector<double>  jointTorqueMax;
 		jointTorqueMax.assign(6, 0.0);
 		jointTorqueMax = meters( tmRobotStateDataToPublish.joint_torque_max, 6);
 		return jointTorqueMax;
 	}
 
-	int32_t project_speed() { return tmRobotStateDataToPublish.proj_speed; }
-	int ma_mode() { return tmRobotStateDataToPublish.ma_mode; }
-	unsigned char stick_play_pause() { return tmRobotStateDataToPublish.stick_play_pause; } // R/W
-	int32_t robot_light() { return tmRobotStateDataToPublish.robot_light; }
+	int32_t project_speed() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.proj_speed; 
+	}
+	int ma_mode() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.ma_mode; 
+	}
+	unsigned char stick_play_pause() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.stick_play_pause; 
+	}
+	int32_t robot_light() const { 
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return tmRobotStateDataToPublish.robot_light; 
+	}
 
-	std::vector<unsigned char> ctrller_DO(){
+	std::vector<unsigned char> ctrller_DO() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		return std::vector<unsigned char>  (tmRobotStateDataToPublish.ctrller_DO.begin(), tmRobotStateDataToPublish.ctrller_DO.end());
 	}
-	std::vector<unsigned char> ctrller_DI() {
+	std::vector<unsigned char> ctrller_DI() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 	    return std::vector<unsigned char>  (tmRobotStateDataToPublish.ctrller_DI.begin(), tmRobotStateDataToPublish.ctrller_DI.end());
 	}
-	std::vector<float> ctrller_AO(){
+	std::vector<float> ctrller_AO() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		return std::vector<float>  (tmRobotStateDataToPublish.ctrller_AO.begin(), tmRobotStateDataToPublish.ctrller_AO.end());
 	}
-	std::vector<float> ctrller_AI(){
-        return std::vector<float>  (tmRobotStateDataToPublish.ctrller_AI.begin(), tmRobotStateDataToPublish.ctrller_AI.end());
-    }
-	std::vector<unsigned char> ee_DO(){
-        return std::vector<unsigned char>  (tmRobotStateDataToPublish.ee_DO.begin(), tmRobotStateDataToPublish.ee_DO.end());
+	std::vector<float> ctrller_AI() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return std::vector<float>  (tmRobotStateDataToPublish.ctrller_AI.begin(), tmRobotStateDataToPublish.ctrller_AI.end());
 	}
-	std::vector<unsigned char> ee_DI(){
+	std::vector<unsigned char> ee_DO() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return std::vector<unsigned char>  (tmRobotStateDataToPublish.ee_DO.begin(), tmRobotStateDataToPublish.ee_DO.end());
+	}
+	std::vector<unsigned char> ee_DI() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
 		return std::vector<unsigned char>  (tmRobotStateDataToPublish.ee_DI.begin(), tmRobotStateDataToPublish.ee_DI.end());
 	}
-	std::vector<float> ee_AI(){
-        return std::vector<float>  (tmRobotStateDataToPublish.ee_AI.begin(), tmRobotStateDataToPublish.ee_AI.end());
+	std::vector<float> ee_AI() const {
+		std::lock_guard<std::mutex> lck(_deserialize_mtx);
+		return std::vector<float>  (tmRobotStateDataToPublish.ee_AI.begin(), tmRobotStateDataToPublish.ee_AI.end());
 	}
 
 	
@@ -275,4 +337,5 @@ public:
 	void set_receive_state(TmCommRC state);
 	void update_tm_robot_publish_state();
 	void print();
+	mutable std::mutex _deserialize_mtx;
 };
