@@ -122,7 +122,7 @@ public:
 /*	Linear motion with tool calculation.
 	More details please refer to the TM_Robot_Expression.pdf Chapter 9.7 */	
 	static std::string set_tool_pose_Line(const std::vector<double> &pose,
-		double vel, double acc_time, int blend_percent, bool fine_goal, int precision = 5);
+		double vel, double acc_time, int blend_percent, bool fine_goal, int precision = 5, bool velocity_as_double = true);
 
 	static std::string set_tool_pose_Line_rel(const std::vector<double> &pose,
 		bool tool_frame, double vel, double acc_time, int blend_percent, bool fine_goal, int precision = 5);

@@ -148,7 +148,7 @@ bool TmDriver::set_tool_pose_Line(const std::vector<double> &pose,
 		double vel, double acc_time, int blend_percent, bool fine_goal, const std::string &id)
 {
 	return (sct.send_script_str(
-		id, TmCommand::set_tool_pose_Line(pose, vel, acc_time, blend_percent, fine_goal)
+		id, TmCommand::set_tool_pose_Line(pose, vel, acc_time, blend_percent, fine_goal, _is_model_s)
 	) == RC_OK);
 }
 
