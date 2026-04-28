@@ -81,7 +81,6 @@ std::string TmCommand::set_tool_pose_Line(const std::vector<double> &pose,
 	double vel, double acc_time, int blend_percent, bool fine_goal, int precision, bool velocity_as_double)
 {
 	auto pose_mmdeg = mmdeg_pose(pose);
-	// int vel_mm = static_cast<int>( std::round(1000.0 * vel));
 	std::stringstream ss;
 	ss << std::fixed << std::setprecision(precision);
 	ss << "Line(\"CAP\",";
