@@ -7,6 +7,7 @@
 #endif
 
 #include <memory>
+#include <cctype>
 #include <cstring>
 #include <sstream>
 #include <iostream>
@@ -348,5 +349,17 @@ std::optional<bool> TmRobotState::is_model_s() const
 	if (!model.has_value()) {
 		return std::nullopt;
 	}
-	return model.value().find("S-") != std::string::npos;
+	// S-series models report e.g. "TM25S", "TM12S" or "TM5S-700":
+	// "TM" + payload digits + 'S'. Non-S models look like "TM12" or "TM5-900".
+	const std::string &name = model.value();
+	auto pos = name.find("TM");
+	if (pos == std::string::npos) {
+		return false;
+	}
+	pos += 2;
+	const auto digits_begin = pos;
+	while (pos < name.size() && std::isdigit(static_cast<unsigned char>(name[pos]))) {
+		++pos;
+	}
+	return pos > digits_begin && pos < name.size() && (name[pos] == 'S' || name[pos] == 's');
 }
